@@ -284,6 +284,16 @@ const translations = {
     'bangkok.hotels': 'Hotels',
     'bangkok.attractions': 'Attractions',
     
+    // Radio
+    'radio.localRadio': 'Local Radio',
+    'radio.stop': 'Stop',
+    'radio.play': 'Play',
+    'radio.pause': 'Pause',
+    'radio.live': 'LIVE',
+    'radio.station': 'Station',
+    'radio.description': 'Description',
+    'radio.language': 'Language',
+    
     // Chiang Mai
     'chiangmai.title': 'Chiang Mai',
     'chiangmai.subtitle': 'The Rose of the North',
@@ -616,6 +626,16 @@ const translations = {
     'bangkok.hotels': 'โรงแรม',
     'bangkok.attractions': 'สถานที่ท่องเที่ยว',
     
+    // Radio
+    'radio.localRadio': 'วิทยุท้องถิ่น',
+    'radio.stop': 'หยุด',
+    'radio.play': 'เล่น',
+    'radio.pause': 'หยุดชั่วคราว',
+    'radio.live': 'สด',
+    'radio.station': 'สถานี',
+    'radio.description': 'คำอธิบาย',
+    'radio.language': 'ภาษา',
+    
     // Chiang Mai
     'chiangmai.title': 'เชียงใหม่',
     'chiangmai.subtitle': 'ดอกกุหลาบแห่งภาคเหนือ',
@@ -947,6 +967,16 @@ const translations = {
     'bangkok.transportation': '交通',
     'bangkok.hotels': '酒店',
     'bangkok.attractions': '景点',
+    
+    // Radio
+    'radio.localRadio': '当地广播',
+    'radio.stop': '停止',
+    'radio.play': '播放',
+    'radio.pause': '暂停',
+    'radio.live': '直播',
+    'radio.station': '电台',
+    'radio.description': '描述',
+    'radio.language': '语言',
     
     // Chiang Mai
     'chiangmai.title': '清迈',

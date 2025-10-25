@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { cityCoordinates } from '@/utils/cityDistance'
 import { NearbyCities } from '@/components/NearbyCities'
+import { LocalRadio } from '@/components/LocalRadio'
 
 interface CityPageClientProps {
   city: string
@@ -83,6 +84,12 @@ export default function CityPageClient({ city }: CityPageClientProps) {
               </p>
             </div>
           </div>
+
+          {/* Local Radio */}
+          <LocalRadio 
+            cityName={city}
+            country={cityInfo.country}
+          />
 
           {/* Quick Actions */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
