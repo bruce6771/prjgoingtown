@@ -26,8 +26,8 @@ export function LocalRadio({ cityName, country }: LocalRadioProps) {
     const stations: Record<string, RadioStation[]> = {
       // 泰国广播电台
       'bangkok': [
-        { name: 'FM 95.5', url: 'https://streaming.radio.co/s8b4b4b4b4/listen', description: 'Thai Pop Music', language: 'Thai' },
-        { name: 'FM 96.5', url: 'https://streaming.radio.co/s9c5c5c5c5/listen', description: 'News & Talk', language: 'Thai' },
+        { name: 'Radio Garden Bangkok 1', url: 'https://radio14.plathong.net/7306/;stream.mp3', description: 'Thai Radio Station', language: 'Thai' },
+        { name: 'Radio Garden Bangkok 2', url: 'https://radio10.plathong.net/7128/;stream.mp3', description: 'Thai Radio Station', language: 'Thai' },
         { name: 'FM 97.5', url: 'https://streaming.radio.co/s0d6d6d6d6/listen', description: 'Classic Hits', language: 'Thai' }
       ],
       'chiang-mai': [
@@ -186,10 +186,6 @@ export function LocalRadio({ cityName, country }: LocalRadioProps) {
       }
     }
   }, [audio])
-
-  // 调试信息
-  console.log('LocalRadio component rendering for:', cityName, country)
-  console.log('Stations found:', stations.length)
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
