@@ -20,6 +20,7 @@ export function LocalRadio({ cityName, country }: LocalRadioProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentStation, setCurrentStation] = useState<RadioStation | null>(null)
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null)
+  const [playStatus, setPlayStatus] = useState<string>('')
 
   // 根据城市和国家获取广播电台
   const getRadioStations = (city: string, country: string): RadioStation[] => {
@@ -142,27 +143,58 @@ export function LocalRadio({ cityName, country }: LocalRadioProps) {
 
     const newAudio = new Audio(station.url)
     newAudio.crossOrigin = 'anonymous'
+    newAudio.preload = 'none'
+    
+    // 设置播放状态
+    setIsPlaying(true)
+    setCurrentStation(station)
+    setPlayStatus('正在连接...')
     
     newAudio.addEventListener('loadstart', () => {
-      setIsPlaying(true)
-      setCurrentStation(station)
+      console.log('开始加载音频流:', station.name)
+      setPlayStatus('正在加载...')
     })
 
-    newAudio.addEventListener('error', () => {
+    newAudio.addEventListener('canplay', () => {
+      console.log('音频可以播放:', station.name)
+      setPlayStatus('准备播放')
+    })
+
+    newAudio.addEventListener('playing', () => {
+      console.log('音频正在播放:', station.name)
+      setPlayStatus('正在播放')
+    })
+
+    newAudio.addEventListener('error', (e) => {
+      console.error('音频播放错误:', e)
       setIsPlaying(false)
       setCurrentStation(null)
-      alert('无法播放此电台，请尝试其他电台')
+      setPlayStatus('播放失败，请尝试其他电台')
     })
 
     newAudio.addEventListener('ended', () => {
+      console.log('音频播放结束:', station.name)
       setIsPlaying(false)
       setCurrentStation(null)
+      setPlayStatus('')
     })
 
-    newAudio.play().catch(() => {
+    newAudio.addEventListener('stalled', () => {
+      console.log('音频流停滞:', station.name)
+      setPlayStatus('连接中断，正在重连...')
+    })
+
+    newAudio.addEventListener('waiting', () => {
+      console.log('等待音频数据:', station.name)
+      setPlayStatus('缓冲中...')
+    })
+
+    // 尝试播放，但不显示错误弹窗
+    newAudio.play().catch((error) => {
+      console.error('播放失败:', error)
       setIsPlaying(false)
       setCurrentStation(null)
-      alert('无法播放此电台，请检查网络连接')
+      setPlayStatus('播放失败，请检查网络连接')
     })
 
     setAudio(newAudio)
@@ -176,6 +208,7 @@ export function LocalRadio({ cityName, country }: LocalRadioProps) {
     }
     setIsPlaying(false)
     setCurrentStation(null)
+    setPlayStatus('')
   }
 
   useEffect(() => {
@@ -214,6 +247,11 @@ export function LocalRadio({ cityName, country }: LocalRadioProps) {
               <p className="text-xs text-blue-600 dark:text-blue-400">
                 {currentStation.language}
               </p>
+              {playStatus && (
+                <p className="text-xs text-blue-500 dark:text-blue-400 mt-1">
+                  {playStatus}
+                </p>
+              )}
             </div>
             <button
               onClick={stopRadio}
