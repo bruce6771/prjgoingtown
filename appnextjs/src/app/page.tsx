@@ -15,13 +15,32 @@ export default function Home() {
   const [nearbyCities, setNearbyCities] = useState<Array<{ name: string; path: string; country: string; distance: number }>>([])
   const [currentCity, setCurrentCity] = useState<{ name: string; path: string; country: string; distance: number } | null>(null)
   const [locationPermission, setLocationPermission] = useState<'granted' | 'denied' | 'prompt' | 'unknown'>('unknown')
+  const [ipLocation, setIpLocation] = useState<{ city: string; country: string; latitude: number; longitude: number } | null>(null)
+  const [locationSource, setLocationSource] = useState<'gps' | 'ip' | 'none'>('none')
 
-  // 获取用户 IP
+  // 获取用户 IP 和位置信息
   useEffect(() => {
     fetch('https://api.ipify.org?format=json')
       .then(res => res.json())
-      .then(data => setUserIP(data.ip))
-      .catch(() => setUserIP('Unknown'))
+      .then(data => {
+        setUserIP(data.ip)
+        // 使用 IP 地址获取位置信息
+        return fetch(`https://ipapi.co/${data.ip}/json/`)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.city && data.country && data.latitude && data.longitude) {
+          setIpLocation({
+            city: data.city,
+            country: data.country_name || data.country,
+            latitude: data.latitude,
+            longitude: data.longitude
+          })
+        }
+      })
+      .catch(() => {
+        setUserIP('Unknown')
+      })
   }, [])
 
   // 检查地理位置权限状态
@@ -44,9 +63,28 @@ export default function Home() {
 
   // 获取附近城市和当前城市
   useEffect(() => {
-    if (latitude && longitude) {
+    let currentLat: number | null = null
+    let currentLon: number | null = null
+    let source: 'gps' | 'ip' | 'none' = 'none'
+
+    // 优先使用 GPS 位置
+    if (latitude && longitude && locationPermission === 'granted') {
+      currentLat = latitude
+      currentLon = longitude
+      source = 'gps'
+    }
+    // 如果没有 GPS 权限，使用 IP 位置
+    else if (ipLocation && (locationPermission === 'denied' || locationPermission === 'prompt')) {
+      currentLat = ipLocation.latitude
+      currentLon = ipLocation.longitude
+      source = 'ip'
+    }
+
+    if (currentLat && currentLon) {
+      setLocationSource(source)
+      
       // 找到当前城市
-      const nearest = findNearestCity(latitude, longitude, 100)
+      const nearest = findNearestCity(currentLat, currentLon, 100)
       if (nearest) {
         setCurrentCity({
           name: nearest.name,
@@ -57,7 +95,7 @@ export default function Home() {
       }
 
       // 获取附近城市
-      const nearby = getNearbyCities(latitude, longitude, 1000, 6)
+      const nearby = getNearbyCities(currentLat, currentLon, 1000, 6)
         .filter(city => city.distance > 0) // 排除距离为0的当前城市
         .slice(0, 5)
         .map(city => ({
@@ -69,7 +107,7 @@ export default function Home() {
       
       setNearbyCities(nearby)
     }
-  }, [latitude, longitude])
+  }, [latitude, longitude, ipLocation, locationPermission])
 
   const handleCitySelect = (cityPath: string) => {
     router.push(`/${cityPath}`)
@@ -180,24 +218,61 @@ export default function Home() {
                     </span>
                   </div>
                   
-                  {latitude && longitude && (
+                  {/* 位置来源和精度提示 */}
+                  {locationSource !== 'none' && (
+                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                          {locationSource === 'gps' ? '📍 GPS 定位' : '🌐 IP 定位'}
+                        </span>
+                        {locationSource === 'ip' && (
+                          <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-1 rounded-full">
+                            可能有误差
+                          </span>
+                        )}
+                      </div>
+                      {locationSource === 'ip' && (
+                        <p className="text-xs text-blue-700 dark:text-blue-300">
+                          IP 定位基于网络服务商位置，可能与实际位置有偏差
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  
+                  {/* GPS 坐标 */}
+                  {latitude && longitude && locationSource === 'gps' && (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">纬度:</span>
+                        <span className="text-gray-600 dark:text-gray-400">GPS 纬度:</span>
                         <span className="font-mono text-sm">{latitude.toFixed(6)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">经度:</span>
+                        <span className="text-gray-600 dark:text-gray-400">GPS 经度:</span>
                         <span className="font-mono text-sm">{longitude.toFixed(6)}</span>
                       </div>
                     </>
                   )}
 
-                  {city && (
+                  {/* IP 坐标 */}
+                  {ipLocation && locationSource === 'ip' && (
+                    <>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">IP 纬度:</span>
+                        <span className="font-mono text-sm">{ipLocation.latitude.toFixed(6)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">IP 经度:</span>
+                        <span className="font-mono text-sm">{ipLocation.longitude.toFixed(6)}</span>
+                      </div>
+                    </>
+                  )}
+
+                  {/* 检测到的城市 */}
+                  {(city || ipLocation?.city) && (
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-400">检测到城市:</span>
                       <span className="font-semibold text-blue-600 dark:text-blue-400">
-                        {city}, {country}
+                        {locationSource === 'gps' ? `${city}, ${country}` : `${ipLocation?.city}, ${ipLocation?.country}`}
                       </span>
                     </div>
                   )}
@@ -214,14 +289,26 @@ export default function Home() {
               {currentCity ? (
                 <div className="space-y-3">
                   <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                    <h4 className="font-semibold text-blue-900 dark:text-blue-100">
-                      {getCityName(currentCity.path, t)}
-                    </h4>
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-blue-900 dark:text-blue-100">
+                        {getCityName(currentCity.path, t)}
+                      </h4>
+                      {locationSource === 'ip' && (
+                        <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-1 rounded-full">
+                          IP 定位
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
                       {currentCity.country}
                     </p>
                     <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
                       📍 距离约 {currentCity.distance}km
+                      {locationSource === 'ip' && (
+                        <span className="text-yellow-600 dark:text-yellow-400 ml-1">
+                          (基于 IP 定位，可能有误差)
+                        </span>
+                      )}
                     </p>
                   </div>
                   <button
@@ -242,9 +329,23 @@ export default function Home() {
           {/* 附近城市 */}
           {nearbyCities.length > 0 && (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                🌟 附近城市
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+                  🌟 附近城市
+                </h3>
+                {locationSource === 'ip' && (
+                  <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-1 rounded-full">
+                    基于 IP 定位
+                  </span>
+                )}
+              </div>
+              {locationSource === 'ip' && (
+                <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                    ⚠️ 基于 IP 地址的定位可能不够精确，建议开启 GPS 定位以获得更准确的结果
+                  </p>
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {nearbyCities.map((city) => (
                   <button
@@ -260,6 +361,11 @@ export default function Home() {
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                       📍 {city.distance}km away
+                      {locationSource === 'ip' && (
+                        <span className="text-yellow-600 dark:text-yellow-400 ml-1">
+                          (可能有误差)
+                        </span>
+                      )}
                     </p>
                   </button>
                 ))}
