@@ -20,28 +20,68 @@ export default function Home() {
 
   // 获取用户 IP 和位置信息
   useEffect(() => {
+    console.log('Getting IP location...')
+    
+    // 使用支持 CORS 的 IP 定位服务
+    fetch('https://ipapi.co/json/')
+      .then(res => res.json())
+      .then(data => {
+        console.log('IP location data:', data)
+        if (data.city && data.country && data.latitude && data.longitude) {
+          const location = {
+            city: data.city,
+            country: data.country_name || data.country,
+            latitude: data.latitude,
+            longitude: data.longitude
+          }
+          console.log('Setting IP location:', location)
+          setIpLocation(location)
+          setUserIP(data.ip || 'Unknown')
+        } else {
+          console.log('Invalid IP location data:', data)
+          // 尝试备用方案
+          fallbackToIpApi()
+        }
+      })
+      .catch((error) => {
+        console.error('IP location fetch error:', error)
+        // 尝试备用方案
+        fallbackToIpApi()
+      })
+  }, [])
+
+  // 备用方案：使用 ipify + ipapi.co
+  const fallbackToIpApi = () => {
+    console.log('Trying fallback IP location...')
     fetch('https://api.ipify.org?format=json')
       .then(res => res.json())
       .then(data => {
+        console.log('Got IP address:', data.ip)
         setUserIP(data.ip)
         // 使用 IP 地址获取位置信息
         return fetch(`https://ipapi.co/${data.ip}/json/`)
       })
       .then(res => res.json())
       .then(data => {
+        console.log('IP location data:', data)
         if (data.city && data.country && data.latitude && data.longitude) {
-          setIpLocation({
+          const location = {
             city: data.city,
             country: data.country_name || data.country,
             latitude: data.latitude,
             longitude: data.longitude
-          })
+          }
+          console.log('Setting IP location:', location)
+          setIpLocation(location)
+        } else {
+          console.log('Invalid IP location data:', data)
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('IP location fetch error:', error)
         setUserIP('Unknown')
       })
-  }, [])
+  }
 
   // 检查地理位置权限状态
   useEffect(() => {
@@ -67,21 +107,41 @@ export default function Home() {
     let currentLon: number | null = null
     let source: 'gps' | 'ip' | 'none' = 'none'
 
+    // 调试信息
+    console.log('Location Debug:', {
+      latitude,
+      longitude,
+      locationPermission,
+      ipLocation,
+      hasGps: !!(latitude && longitude),
+      hasIp: !!ipLocation
+    })
+
     // 优先使用 GPS 位置
     if (latitude && longitude && locationPermission === 'granted') {
       currentLat = latitude
       currentLon = longitude
       source = 'gps'
+      console.log('Using GPS location:', { currentLat, currentLon })
     }
     // 如果没有 GPS 权限，使用 IP 位置
     else if (ipLocation && (locationPermission === 'denied' || locationPermission === 'prompt')) {
       currentLat = ipLocation.latitude
       currentLon = ipLocation.longitude
       source = 'ip'
+      console.log('Using IP location:', { currentLat, currentLon })
+    }
+    // 如果权限状态未知，也尝试使用 IP 位置
+    else if (ipLocation && locationPermission === 'unknown') {
+      currentLat = ipLocation.latitude
+      currentLon = ipLocation.longitude
+      source = 'ip'
+      console.log('Using IP location (unknown permission):', { currentLat, currentLon })
     }
 
     if (currentLat && currentLon) {
       setLocationSource(source)
+      console.log('Setting location source:', source)
       
       // 找到当前城市
       const nearest = findNearestCity(currentLat, currentLon, 100)
@@ -92,6 +152,7 @@ export default function Home() {
           country: nearest.country,
           distance: Math.round(nearest.distance)
         })
+        console.log('Found nearest city:', nearest)
       }
 
       // 获取附近城市
@@ -106,6 +167,9 @@ export default function Home() {
         }))
       
       setNearbyCities(nearby)
+      console.log('Found nearby cities:', nearby)
+    } else {
+      console.log('No location data available')
     }
   }, [latitude, longitude, ipLocation, locationPermission])
 
