@@ -187,6 +187,10 @@ export function LocalRadio({ cityName, country }: LocalRadioProps) {
     }
   }, [audio])
 
+  // 调试信息
+  console.log('LocalRadio component rendering for:', cityName, country)
+  console.log('Stations found:', stations.length)
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
       <div className="flex items-center justify-between mb-4">

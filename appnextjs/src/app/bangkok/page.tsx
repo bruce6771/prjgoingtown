@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useLanguage } from '@/contexts/LanguageContext'
 import { NearbyCities } from '@/components/NearbyCities'
+import { LocalRadio } from '@/components/LocalRadio'
 
 export default function BangkokPage() {
   const router = useRouter()
@@ -54,6 +55,12 @@ export default function BangkokPage() {
               </p>
             </div>
           </div>
+
+          {/* Local Radio */}
+          <LocalRadio 
+            cityName="bangkok"
+            country="Thailand"
+          />
 
           {/* Quick Actions */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
