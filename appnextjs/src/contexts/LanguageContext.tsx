@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
-type Language = 'en' | 'th' | 'zh'
+type Language = 'en' | 'th' | 'zh' | 'vi'
 
 interface LanguageContextType {
   language: Language
@@ -20,18 +20,19 @@ const translations = {
     'nav.changeCity': 'Change City',
     'nav.otherCities': 'Other Cities',
     'nav.back': 'Go Back',
-    
+
     // Theme
     'theme.light': 'Light',
     'theme.dark': 'Dark',
     'theme.toggle': 'Toggle theme',
-    
+
     // Language
     'lang.english': 'English',
     'lang.thai': 'ไทย',
     'lang.chinese': '中文',
+    'lang.vietnamese': 'Tiếng Việt',
     'lang.select': 'Select language',
-    
+
     // Common
     'common.loading': 'Loading...',
     'common.detecting': 'Detecting your location...',
@@ -40,7 +41,37 @@ const translations = {
     'common.comingSoon': 'Coming Soon!',
     'common.underDevelopment': 'Under Development',
     'common.developmentNotice': 'This city page is currently under development. We\'re working hard to bring you the best experience. Check back soon for updates!',
-    
+    'common.city': 'city',
+    'common.cities': 'cities',
+    'common.locationInfo': 'Location Information',
+    'common.currentCity': 'Current City',
+    'common.nearbyCities': 'Nearby Cities',
+    'common.ipAddress': 'IP Address',
+    'common.latitude': 'Latitude',
+    'common.longitude': 'Longitude',
+    'common.detectedCity': 'Detected City',
+    'common.distance': 'Distance',
+    'common.gpsLocation': 'GPS Location',
+    'common.ipLocation': 'IP Location',
+    'common.mayHaveError': 'May have error',
+    'common.locationPermission': 'Location Permission',
+    'common.granted': 'Granted',
+    'common.denied': 'Denied',
+    'common.prompt': 'Pending',
+    'common.unknown': 'Unknown',
+    'common.managePermission': 'Manage Location Permission',
+    'common.enablePermission': 'Enable Location Permission',
+    'common.gettingLocation': 'Getting location information...',
+    'common.locationFailed': 'Location detection failed',
+    'common.noNearbyCity': 'No nearby city detected',
+    'common.detectingCity': 'Detecting city...',
+    'common.visit': 'Visit',
+    'common.redetectLocation': 'Re-detect Location',
+    'common.basedOnIP': 'Based on IP location',
+    'common.ipLocationNotice': 'IP-based location may not be accurate. We recommend enabling GPS location for more precise results.',
+    'common.ipLocationWarning': '⚠️ IP-based location may not be accurate, GPS location is recommended for better results',
+    'common.mayHaveDeviation': '(may have deviation)',
+
     // City pages
     'city.welcome': 'Welcome to',
     'city.quickActions': 'Quick Actions',
@@ -52,7 +83,7 @@ const translations = {
     'city.distance': 'km away',
     'city.groupByCountry': 'Group by Country',
     'city.popularCities': 'Popular Cities',
-    
+
     // City Names - English
     'city.bangkok': 'Bangkok',
     'city.chiang-mai': 'Chiang Mai',
@@ -268,7 +299,7 @@ const translations = {
     'city.san-francisco': 'San Francisco',
     'city.toronto': 'Toronto',
     'city.vancouver': 'Vancouver',
-    
+
     // Bangkok
     'bangkok.title': 'Bangkok',
     'bangkok.subtitle': 'Welcome to the City of Angels',
@@ -283,7 +314,7 @@ const translations = {
     'bangkok.transportation': 'Transportation',
     'bangkok.hotels': 'Hotels',
     'bangkok.attractions': 'Attractions',
-    
+
     // Radio
     'radio.localRadio': 'Local Radio',
     'radio.stop': 'Stop',
@@ -293,7 +324,7 @@ const translations = {
     'radio.station': 'Station',
     'radio.description': 'Description',
     'radio.language': 'Language',
-    
+
     // Chiang Mai
     'chiangmai.title': 'Chiang Mai',
     'chiangmai.subtitle': 'The Rose of the North',
@@ -308,7 +339,7 @@ const translations = {
     'chiangmai.trekking': 'Trekking',
     'chiangmai.marketsAction': 'Markets',
     'chiangmai.food': 'Food',
-    
+
     // Phuket
     'phuket.title': 'Phuket',
     'phuket.subtitle': 'The Pearl of the Andaman',
@@ -323,7 +354,7 @@ const translations = {
     'phuket.diving': 'Diving',
     'phuket.islandTours': 'Island Tours',
     'phuket.sunsetAction': 'Sunset',
-    
+
     // Pattaya
     'pattaya.title': 'Pattaya',
     'pattaya.subtitle': 'The Beach City',
@@ -338,7 +369,7 @@ const translations = {
     'pattaya.shows': 'Shows',
     'pattaya.shoppingAction': 'Shopping',
     'pattaya.food': 'Food',
-    
+
     // Mae Sai
     'maesai.title': 'Mae Sai',
     'maesai.subtitle': 'The Northern Border Town',
@@ -362,18 +393,19 @@ const translations = {
     'nav.changeCity': 'เปลี่ยนเมือง',
     'nav.otherCities': 'เมืองอื่นๆ',
     'nav.back': 'กลับ',
-    
+
     // Theme
     'theme.light': 'สว่าง',
     'theme.dark': 'มืด',
     'theme.toggle': 'เปลี่ยนธีม',
-    
+
     // Language
     'lang.english': 'English',
     'lang.thai': 'ไทย',
     'lang.chinese': '中文',
+    'lang.vietnamese': 'Tiếng Việt',
     'lang.select': 'เลือกภาษา',
-    
+
     // Common
     'common.loading': 'กำลังโหลด...',
     'common.detecting': 'กำลังตรวจสอบตำแหน่งของคุณ...',
@@ -382,7 +414,37 @@ const translations = {
     'common.comingSoon': 'เร็วๆ นี้!',
     'common.underDevelopment': 'กำลังพัฒนา',
     'common.developmentNotice': 'หน้านี้กำลังอยู่ในระหว่างการพัฒนา เรากำลังทำงานอย่างหนักเพื่อนำเสนอประสบการณ์ที่ดีที่สุดให้กับคุณ กรุณาติดตามข่าวสาร',
-    
+    'common.city': 'เมือง',
+    'common.cities': 'เมือง',
+    'common.locationInfo': 'ข้อมูลตำแหน่ง',
+    'common.currentCity': 'เมืองปัจจุบัน',
+    'common.nearbyCities': 'เมืองใกล้เคียง',
+    'common.ipAddress': 'ที่อยู่ IP',
+    'common.latitude': 'ละติจูด',
+    'common.longitude': 'ลองจิจูด',
+    'common.detectedCity': 'เมืองที่ตรวจพบ',
+    'common.distance': 'ระยะทาง',
+    'common.gpsLocation': 'ตำแหน่ง GPS',
+    'common.ipLocation': 'ตำแหน่ง IP',
+    'common.mayHaveError': 'อาจมีข้อผิดพลาด',
+    'common.locationPermission': 'สิทธิ์การเข้าถึงตำแหน่ง',
+    'common.granted': 'อนุญาต',
+    'common.denied': 'ปฏิเสธ',
+    'common.prompt': 'รอการอนุญาต',
+    'common.unknown': 'ไม่ทราบ',
+    'common.managePermission': 'จัดการสิทธิ์ตำแหน่ง',
+    'common.enablePermission': 'เปิดใช้สิทธิ์ตำแหน่ง',
+    'common.gettingLocation': 'กำลังรับข้อมูลตำแหน่ง...',
+    'common.locationFailed': 'การตรวจสอบตำแหน่งล้มเหลว',
+    'common.noNearbyCity': 'ไม่พบเมืองใกล้เคียง',
+    'common.detectingCity': 'กำลังตรวจสอบเมือง...',
+    'common.visit': 'เยี่ยมชม',
+    'common.redetectLocation': 'ตรวจสอบตำแหน่งใหม่',
+    'common.basedOnIP': 'ตามตำแหน่ง IP',
+    'common.ipLocationNotice': 'ตำแหน่งจาก IP อาจไม่แม่นยำ แนะนำให้เปิดใช้ GPS เพื่อผลลัพธ์ที่แม่นยำยิ่งขึ้น',
+    'common.ipLocationWarning': '⚠️ ตำแหน่งจาก IP อาจไม่แม่นยำ แนะนำให้ใช้ GPS เพื่อผลลัพธ์ที่ดีกว่า',
+    'common.mayHaveDeviation': '(อาจมีความคลาดเคลื่อน)',
+
     // City pages
     'city.welcome': 'ยินดีต้อนรับสู่',
     'city.quickActions': 'การดำเนินการด่วน',
@@ -394,7 +456,7 @@ const translations = {
     'city.distance': 'กิโลเมตร',
     'city.groupByCountry': 'จัดกลุ่มตามประเทศ',
     'city.popularCities': 'เมืองยอดนิยม',
-    
+
     // City Names - Thai
     'city.bangkok': 'กรุงเทพฯ',
     'city.chiang-mai': 'เชียงใหม่',
@@ -610,7 +672,7 @@ const translations = {
     'city.san-francisco': 'ซานฟรานซิสโก',
     'city.toronto': 'โตรอนโต',
     'city.vancouver': 'แวนคูเวอร์',
-    
+
     // Bangkok
     'bangkok.title': 'กรุงเทพฯ',
     'bangkok.subtitle': 'ยินดีต้อนรับสู่เมืองแห่งทูตสวรรค์',
@@ -625,7 +687,7 @@ const translations = {
     'bangkok.transportation': 'การขนส่ง',
     'bangkok.hotels': 'โรงแรม',
     'bangkok.attractions': 'สถานที่ท่องเที่ยว',
-    
+
     // Radio
     'radio.localRadio': 'วิทยุท้องถิ่น',
     'radio.stop': 'หยุด',
@@ -635,7 +697,7 @@ const translations = {
     'radio.station': 'สถานี',
     'radio.description': 'คำอธิบาย',
     'radio.language': 'ภาษา',
-    
+
     // Chiang Mai
     'chiangmai.title': 'เชียงใหม่',
     'chiangmai.subtitle': 'ดอกกุหลาบแห่งภาคเหนือ',
@@ -650,7 +712,7 @@ const translations = {
     'chiangmai.trekking': 'เดินป่า',
     'chiangmai.marketsAction': 'ตลาด',
     'chiangmai.food': 'อาหาร',
-    
+
     // Phuket
     'phuket.title': 'ภูเก็ต',
     'phuket.subtitle': 'ไข่มุกแห่งอันดามัน',
@@ -665,7 +727,7 @@ const translations = {
     'phuket.diving': 'ดำน้ำ',
     'phuket.islandTours': 'ทัวร์เกาะ',
     'phuket.sunsetAction': 'พระอาทิตย์ตก',
-    
+
     // Pattaya
     'pattaya.title': 'พัทยา',
     'pattaya.subtitle': 'เมืองชายหาด',
@@ -680,7 +742,7 @@ const translations = {
     'pattaya.shows': 'การแสดง',
     'pattaya.shoppingAction': 'ช้อปปิ้ง',
     'pattaya.food': 'อาหาร',
-    
+
     // Mae Sai
     'maesai.title': 'แม่สาย',
     'maesai.subtitle': 'เมืองชายแดนภาคเหนือ',
@@ -704,18 +766,19 @@ const translations = {
     'nav.changeCity': '切换城市',
     'nav.otherCities': '其他城市',
     'nav.back': '返回',
-    
+
     // Theme
     'theme.light': '浅色',
     'theme.dark': '深色',
     'theme.toggle': '切换主题',
-    
+
     // Language
     'lang.english': 'English',
     'lang.thai': 'ไทย',
     'lang.chinese': '中文',
+    'lang.vietnamese': 'Tiếng Việt',
     'lang.select': '选择语言',
-    
+
     // Common
     'common.loading': '加载中...',
     'common.detecting': '正在检测您的位置...',
@@ -724,7 +787,37 @@ const translations = {
     'common.comingSoon': '即将推出！',
     'common.underDevelopment': '开发中',
     'common.developmentNotice': '此城市页面正在开发中。我们正在努力为您带来最佳体验。请稍后查看更新！',
-    
+    'common.city': '个城市',
+    'common.cities': '个城市',
+    'common.locationInfo': '位置信息',
+    'common.currentCity': '当前城市',
+    'common.nearbyCities': '附近城市',
+    'common.ipAddress': 'IP 地址',
+    'common.latitude': '纬度',
+    'common.longitude': '经度',
+    'common.detectedCity': '检测到城市',
+    'common.distance': '距离',
+    'common.gpsLocation': 'GPS 定位',
+    'common.ipLocation': 'IP 定位',
+    'common.mayHaveError': '可能有误差',
+    'common.locationPermission': '地理位置权限',
+    'common.granted': '已授权',
+    'common.denied': '已拒绝',
+    'common.prompt': '待授权',
+    'common.unknown': '未知',
+    'common.managePermission': '管理位置权限',
+    'common.enablePermission': '开启位置权限',
+    'common.gettingLocation': '正在获取位置信息...',
+    'common.locationFailed': '位置获取失败',
+    'common.noNearbyCity': '未检测到附近城市',
+    'common.detectingCity': '正在检测城市...',
+    'common.visit': '访问',
+    'common.redetectLocation': '重新检测位置',
+    'common.basedOnIP': '基于 IP 定位',
+    'common.ipLocationNotice': 'IP 定位基于网络服务商位置，可能与实际位置有偏差',
+    'common.ipLocationWarning': '⚠️ 基于 IP 地址的定位可能不够精确，建议开启 GPS 定位以获得更准确的结果',
+    'common.mayHaveDeviation': '(可能有误差)',
+
     // City pages
     'city.welcome': '欢迎来到',
     'city.quickActions': '快速操作',
@@ -736,7 +829,7 @@ const translations = {
     'city.distance': '公里',
     'city.groupByCountry': '按国家分组',
     'city.popularCities': '热门城市',
-    
+
     // City Names - Chinese
     'city.bangkok': '曼谷',
     'city.chiang-mai': '清迈',
@@ -952,7 +1045,7 @@ const translations = {
     'city.san-francisco': '旧金山',
     'city.toronto': '多伦多',
     'city.vancouver': '温哥华',
-    
+
     // Bangkok
     'bangkok.title': '曼谷',
     'bangkok.subtitle': '欢迎来到天使之城',
@@ -967,7 +1060,7 @@ const translations = {
     'bangkok.transportation': '交通',
     'bangkok.hotels': '酒店',
     'bangkok.attractions': '景点',
-    
+
     // Radio
     'radio.localRadio': '当地广播',
     'radio.stop': '停止',
@@ -977,7 +1070,7 @@ const translations = {
     'radio.station': '电台',
     'radio.description': '描述',
     'radio.language': '语言',
-    
+
     // Chiang Mai
     'chiangmai.title': '清迈',
     'chiangmai.subtitle': '北方玫瑰',
@@ -992,7 +1085,7 @@ const translations = {
     'chiangmai.trekking': '徒步',
     'chiangmai.marketsAction': '市场',
     'chiangmai.food': '美食',
-    
+
     // Phuket
     'phuket.title': '普吉岛',
     'phuket.subtitle': '安达曼珍珠',
@@ -1007,7 +1100,7 @@ const translations = {
     'phuket.diving': '潜水',
     'phuket.islandTours': '跳岛游',
     'phuket.sunsetAction': '日落',
-    
+
     // Pattaya
     'pattaya.title': '芭提雅',
     'pattaya.subtitle': '海滩城市',
@@ -1022,7 +1115,7 @@ const translations = {
     'pattaya.shows': '表演',
     'pattaya.shoppingAction': '购物',
     'pattaya.food': '美食',
-    
+
     // Mae Sai
     'maesai.title': '美塞',
     'maesai.subtitle': '北部边境小镇',
@@ -1039,6 +1132,379 @@ const translations = {
     'maesai.food': '美食',
     'maesai.borderInfo': '边境信息',
     'maesai.borderDesc': '美塞是泰国最北端的边境城市，与缅甸相连。边境口岸每日开放，可进行一日游和购物。',
+  },
+  vi: {
+    // Navigation
+    'nav.home': 'Trang chủ',
+    'nav.changeCity': 'Đổi thành phố',
+    'nav.otherCities': 'Thành phố khác',
+    'nav.back': 'Quay lại',
+
+    // Theme
+    'theme.light': 'Sáng',
+    'theme.dark': 'Tối',
+    'theme.toggle': 'Chuyển đổi chủ đề',
+
+    // Language
+    'lang.english': 'English',
+    'lang.thai': 'ไทย',
+    'lang.chinese': '中文',
+    'lang.vietnamese': 'Tiếng Việt',
+    'lang.select': 'Chọn ngôn ngữ',
+
+    // Common
+    'common.loading': 'Đang tải...',
+    'common.detecting': 'Đang xác định vị trí của bạn...',
+    'common.error': 'Lỗi',
+    'common.tryAgain': 'Thử lại',
+    'common.comingSoon': 'Sắp ra mắt!',
+    'common.underDevelopment': 'Đang phát triển',
+    'common.developmentNotice': 'Trang thành phố này đang được phát triển. Chúng tôi đang nỗ lực mang đến trải nghiệm tốt nhất cho bạn. Hãy quay lại kiểm tra cập nhật!',
+    'common.city': 'thành phố',
+    'common.cities': 'thành phố',
+    'common.locationInfo': 'Thông tin vị trí',
+    'common.currentCity': 'Thành phố hiện tại',
+    'common.nearbyCities': 'Thành phố lân cận',
+    'common.ipAddress': 'Địa chỉ IP',
+    'common.latitude': 'Vĩ độ',
+    'common.longitude': 'Kinh độ',
+    'common.detectedCity': 'Thành phố được phát hiện',
+    'common.distance': 'Khoảng cách',
+    'common.gpsLocation': 'Định vị GPS',
+    'common.ipLocation': 'Định vị IP',
+    'common.mayHaveError': 'Có thể có sai số',
+    'common.locationPermission': 'Quyền truy cập vị trí',
+    'common.granted': 'Đã cấp phép',
+    'common.denied': 'Đã từ chối',
+    'common.prompt': 'Chờ cấp phép',
+    'common.unknown': 'Không rõ',
+    'common.managePermission': 'Quản lý quyền vị trí',
+    'common.enablePermission': 'Bật quyền vị trí',
+    'common.gettingLocation': 'Đang lấy thông tin vị trí...',
+    'common.locationFailed': 'Lấy vị trí thất bại',
+    'common.noNearbyCity': 'Không phát hiện thành phố gần đây',
+    'common.detectingCity': 'Đang phát hiện thành phố...',
+    'common.visit': 'Thăm',
+    'common.redetectLocation': 'Phát hiện lại vị trí',
+    'common.basedOnIP': 'Dựa trên định vị IP',
+    'common.ipLocationNotice': 'Định vị IP dựa trên vị trí nhà cung cấp mạng, có thể khác với vị trí thực tế',
+    'common.ipLocationWarning': '⚠️ Định vị dựa trên địa chỉ IP có thể không chính xác, khuyến nghị bật GPS để có kết quả chính xác hơn',
+    'common.mayHaveDeviation': '(có thể có sai lệch)',
+
+    // City pages
+    'city.welcome': 'Chào mừng đến',
+    'city.quickActions': 'Thao tác nhanh',
+    'city.select': 'Chọn thành phố của bạn',
+    'city.selectDescription': 'Chọn thành phố của bạn để bắt đầu với GoingTown',
+    'city.nearby': 'Thành phố gần bạn',
+    'city.allCities': 'Tất cả thành phố có sẵn',
+    'city.nearbyCities': 'Thành phố lân cận',
+    'city.distance': 'km',
+    'city.groupByCountry': 'Nhóm theo quốc gia',
+    'city.popularCities': 'Thành phố phổ biến',
+
+    // City Names - Vietnamese
+    'city.bangkok': 'Bangkok',
+    'city.chiang-mai': 'Chiang Mai',
+    'city.chiang-rai': 'Chiang Rai',
+    'city.phuket': 'Phuket',
+    'city.pattaya': 'Pattaya',
+    'city.krabi': 'Krabi',
+    'city.koh-samui': 'Koh Samui',
+    'city.koh-phangan': 'Koh Phangan',
+    'city.koh-tao': 'Koh Tao',
+    'city.ayutthaya': 'Ayutthaya',
+    'city.sukhothai': 'Sukhothai',
+    'city.kanchanaburi': 'Kanchanaburi',
+    'city.hua-hin': 'Hua Hin',
+    'city.cha-am': 'Cha-am',
+    'city.khon-kaen': 'Khon Kaen',
+    'city.udon-thani': 'Udon Thani',
+    'city.nakhon-ratchasima': 'Nakhon Ratchasima',
+    'city.ubon-ratchathani': 'Ubon Ratchathani',
+    'city.hat-yai': 'Hat Yai',
+    'city.surat-thani': 'Surat Thani',
+    'city.nakhon-si-thammarat': 'Nakhon Si Thammarat',
+    'city.trang': 'Trang',
+    'city.krabi-town': 'Krabi Town',
+    'city.ranong': 'Ranong',
+    'city.chumphon': 'Chumphon',
+    'city.mae-sai': 'Mae Sai',
+    'city.singapore': 'Singapore',
+    'city.kuala-lumpur': 'Kuala Lumpur',
+    // Malaysia cities
+    'city.george-town': 'George Town',
+    'city.johor-bahru': 'Johor Bahru',
+    'city.ipoh': 'Ipoh',
+    'city.shah-alam': 'Shah Alam',
+    'city.petaling-jaya': 'Petaling Jaya',
+    'city.kuching': 'Kuching',
+    'city.kota-kinabalu': 'Kota Kinabalu',
+    'city.klang': 'Klang',
+    'city.subang-jaya': 'Subang Jaya',
+    'city.kuala-terengganu': 'Kuala Terengganu',
+    'city.kota-bharu': 'Kota Bharu',
+    'city.alor-setar': 'Alor Setar',
+    'city.seremban': 'Seremban',
+    'city.malacca': 'Malacca',
+    'city.kuantan': 'Kuantan',
+    'city.taiping': 'Taiping',
+    'city.kulim': 'Kulim',
+    'city.batu-pahat': 'Batu Pahat',
+    'city.sandakan': 'Sandakan',
+    'city.tawau': 'Tawau',
+    'city.miri': 'Miri',
+    'city.sibu': 'Sibu',
+    'city.kangar': 'Kangar',
+    'city.kuala-selangor': 'Kuala Selangor',
+    'city.teluk-intan': 'Teluk Intan',
+    'city.temerloh': 'Temerloh',
+    'city.kuala-lipis': 'Kuala Lipis',
+    'city.raub': 'Raub',
+    'city.bentong': 'Bentong',
+    'city.mentakab': 'Mentakab',
+    'city.kuala-pilah': 'Kuala Pilah',
+    'city.port-dickson': 'Port Dickson',
+    'city.lukut': 'Lukut',
+    'city.senawang': 'Senawang',
+    'city.bahau': 'Bahau',
+    'city.gemas': 'Gemas',
+    'city.tampin': 'Tampin',
+    'city.jelebu': 'Jelebu',
+    'city.kuala-klawang': 'Kuala Klawang',
+    'city.rembau': 'Rembau',
+    'city.lenggeng': 'Lenggeng',
+    'city.pedas': 'Pedas',
+    'city.jempol': 'Jempol',
+    'city.rompin': 'Rompin',
+    'city.pekan': 'Pekan',
+    'city.jerantut': 'Jerantut',
+    'city.maran': 'Maran',
+    'city.chenor': 'Chenor',
+    'city.bera': 'Bera',
+    'city.lanchang': 'Lanchang',
+    'city.karak': 'Karak',
+    'city.gua-musang': 'Gua Musang',
+    'city.kuala-krai': 'Kuala Krai',
+    'city.machang': 'Machang',
+    'city.pasir-mas': 'Pasir Mas',
+    'city.tumpat': 'Tumpat',
+    'city.bachok': 'Bachok',
+    'city.ketereh': 'Ketereh',
+    'city.kubang-kerian': 'Kubang Kerian',
+    'city.pengkalan-chepa': 'Pengkalan Chepa',
+    'city.wakaf-bharu': 'Wakaf Bharu',
+    'city.pasir-puteh': 'Pasir Puteh',
+    'city.jeli': 'Jeli',
+    'city.tanah-merah': 'Tanah Merah',
+    'city.kemaman': 'Kemaman',
+    'city.dungun': 'Dungun',
+    'city.marang': 'Marang',
+    'city.hulu-terengganu': 'Hulu Terengganu',
+    'city.setiu': 'Setiu',
+    'city.besut': 'Besut',
+    'city.kuala-nerus': 'Kuala Nerus',
+    'city.jakarta': 'Jakarta',
+    'city.manila': 'Manila',
+    'city.ho-chi-minh': 'Thành phố Hồ Chí Minh',
+    'city.hanoi': 'Hà Nội',
+    // Vietnam cities
+    'city.da-nang': 'Đà Nẵng',
+    'city.hai-phong': 'Hải Phòng',
+    'city.can-tho': 'Cần Thơ',
+    'city.bien-hoa': 'Biên Hòa',
+    'city.hue': 'Huế',
+    'city.nha-trang': 'Nha Trang',
+    'city.vung-tau': 'Vũng Tàu',
+    'city.qui-nhon': 'Quy Nhon',
+    'city.buon-ma-thuot': 'Buôn Ma Thuột',
+    'city.thai-nguyen': 'Thái Nguyên',
+    'city.thanh-hoa': 'Thanh Hóa',
+    'city.nam-dinh': 'Nam Định',
+    'city.vinh': 'Vinh',
+    'city.long-xuyen': 'Long Xuyên',
+    'city.rach-gia': 'Rạch Giá',
+    'city.my-tho': 'Mỹ Tho',
+    'city.ca-mau': 'Cà Mau',
+    'city.bac-lieu': 'Bạc Liêu',
+    'city.soc-trang': 'Sóc Trăng',
+    'city.tra-vinh': 'Trà Vinh',
+    'city.ben-tre': 'Bến Tre',
+    'city.vinh-long': 'Vĩnh Long',
+    'city.dong-thap': 'Đồng Tháp',
+    'city.an-giang': 'An Giang',
+    'city.kien-giang': 'Kiên Giang',
+    'city.hau-giang': 'Hậu Giang',
+    'city.tien-giang': 'Tiền Giang',
+    'city.binh-duong': 'Bình Dương',
+    'city.tay-ninh': 'Tây Ninh',
+    'city.binh-phuoc': 'Bình Phước',
+    'city.dong-nai': 'Đồng Nai',
+    'city.ba-ria-vung-tau': 'Bà Rịa-Vũng Tàu',
+    'city.lam-dong': 'Lâm Đồng',
+    'city.ninh-thuan': 'Ninh Thuận',
+    'city.binh-thuan': 'Bình Thuận',
+    'city.khanh-hoa': 'Khánh Hòa',
+    'city.phu-yen': 'Phú Yên',
+    'city.dak-lak': 'Đắk Lắk',
+    'city.dak-nong': 'Đắk Nông',
+    'city.gia-lai': 'Gia Lai',
+    'city.kon-tum': 'Kon Tum',
+    'city.quang-nam': 'Quảng Nam',
+    'city.quang-ngai': 'Quảng Ngãi',
+    'city.binh-dinh': 'Bình Định',
+    'city.phu-tho': 'Phú Thọ',
+    'city.vinh-phuc': 'Vĩnh Phúc',
+    'city.bac-ninh': 'Bắc Ninh',
+    'city.hai-duong': 'Hải Dương',
+    'city.hung-yen': 'Hưng Yên',
+    'city.ha-nam': 'Hà Nam',
+    'city.ninh-binh': 'Ninh Bình',
+    'city.ha-tinh': 'Hà Tĩnh',
+    'city.quang-binh': 'Quảng Bình',
+    'city.quang-tri': 'Quảng Trị',
+    'city.thua-thien-hue': 'Thừa Thiên Huế',
+    'city.long-an': 'Long An',
+    'city.seoul': 'Seoul',
+    'city.tokyo': 'Tokyo',
+    'city.osaka': 'Osaka',
+    'city.hong-kong': 'Hong Kong',
+    'city.taipei': 'Taipei',
+    'city.beijing': 'Bắc Kinh',
+    'city.shanghai': 'Thượng Hải',
+    'city.guangzhou': 'Quảng Châu',
+    'city.shenzhen': 'Thâm Quyến',
+    'city.chengdu': 'Thành Đô',
+    'city.hangzhou': 'Hàng Châu',
+    'city.wuhan': 'Vũ Hán',
+    'city.xian': 'Tây An',
+    'city.nanjing': 'Nam Kinh',
+    'city.tianjin': 'Thiên Tân',
+    'city.chongqing': 'Trùng Khánh',
+    'city.suzhou': 'Tô Châu',
+    'city.dongguan': 'Đông Quan',
+    'city.foshan': 'Phật Sơn',
+    'city.qingdao': 'Thanh Đảo',
+    'city.dalian': 'Đại Liên',
+    'city.ningbo': 'Ninh Ba',
+    'city.xiamen': 'Hạ Môn',
+    'city.changsha': 'Trường Sa',
+    'city.zhengzhou': 'Trịnh Châu',
+    'city.jinan': 'Tế Nam',
+    'city.harbin': 'Cáp Nhĩ Tân',
+    'city.shenyang': 'Thẩm Dương',
+    'city.kunming': 'Côn Minh',
+    'city.nanchang': 'Nam Xương',
+    'city.fuzhou': 'Phúc Châu',
+    'city.shijiazhuang': 'Thạch Gia Trang',
+    'city.taiyuan': 'Thái Nguyên',
+    'city.hefei': 'Hợp Phì',
+    'city.nanning': 'Nam Ninh',
+    'city.guiyang': 'Quý Dương',
+    'city.lanzhou': 'Lan Châu',
+    'city.urumqi': 'Ô Lỗ Mộc Tề',
+    'city.hohhot': 'Hô Hòa Hạo Đặc',
+    'city.yinchuan': 'Ngân Xuyên',
+    'city.xining': 'Tây Ninh',
+    'city.lhasa': 'Lhasa',
+    'city.sydney': 'Sydney',
+    'city.melbourne': 'Melbourne',
+    'city.london': 'London',
+    'city.paris': 'Paris',
+    'city.berlin': 'Berlin',
+    'city.amsterdam': 'Amsterdam',
+    'city.new-york': 'New York',
+    'city.los-angeles': 'Los Angeles',
+    'city.san-francisco': 'San Francisco',
+    'city.toronto': 'Toronto',
+    'city.vancouver': 'Vancouver',
+
+    // Bangkok
+    'bangkok.title': 'Bangkok',
+    'bangkok.subtitle': 'Chào mừng đến Thành phố Thiên thần',
+    'bangkok.subtitleThai': 'เมืองแห่งทูตสวรรค์',
+    'bangkok.food': 'Ẩm thực địa phương',
+    'bangkok.foodDesc': 'Khám phá ẩm thực Thái chính gốc và trải nghiệm đồ ăn đường phố',
+    'bangkok.temples': 'Chùa chiền & Văn hóa',
+    'bangkok.templesDesc': 'Khám phá những ngôi chùa cổ kính và di sản văn hóa phong phú',
+    'bangkok.shopping': 'Mua sắm',
+    'bangkok.shoppingDesc': 'Từ trung tâm thương mại sang trọng đến chợ nhộn nhịp',
+    'bangkok.findFood': 'Tìm đồ ăn',
+    'bangkok.transportation': 'Giao thông',
+    'bangkok.hotels': 'Khách sạn',
+    'bangkok.attractions': 'Điểm tham quan',
+
+    // Radio
+    'radio.localRadio': 'Radio địa phương',
+    'radio.stop': 'Dừng',
+    'radio.play': 'Phát',
+    'radio.pause': 'Tạm dừng',
+    'radio.live': 'TRỰC TIẾP',
+    'radio.station': 'Đài',
+    'radio.description': 'Mô tả',
+    'radio.language': 'Ngôn ngữ',
+
+    // Chiang Mai
+    'chiangmai.title': 'Chiang Mai',
+    'chiangmai.subtitle': 'Hoa hồng phương Bắc',
+    'chiangmai.subtitleThai': 'ดอกกุหลาบแห่งภาคเหนือ',
+    'chiangmai.temples': 'Chùa chiền & Văn hóa',
+    'chiangmai.templesDesc': 'Khám phá những ngôi chùa cổ kính và văn hóa Lanna phong phú',
+    'chiangmai.mountains': 'Núi non & Thiên nhiên',
+    'chiangmai.mountainsDesc': 'Trekking, thác nước và phiêu lưu trên núi',
+    'chiangmai.markets': 'Chợ đêm',
+    'chiangmai.marketsDesc': 'Phố đi bộ Chủ nhật nổi tiếng và thủ công mỹ nghệ địa phương',
+    'chiangmai.templesAction': 'Chùa chiền',
+    'chiangmai.trekking': 'Trekking',
+    'chiangmai.marketsAction': 'Chợ',
+    'chiangmai.food': 'Ẩm thực',
+
+    // Phuket
+    'phuket.title': 'Phuket',
+    'phuket.subtitle': 'Viên ngọc trai Andaman',
+    'phuket.subtitleThai': 'ไข่มุกแห่งอันดามัน',
+    'phuket.beaches': 'Bãi biển & Đảo',
+    'phuket.beachesDesc': 'Những bãi biển đẹp và cuộc phiêu lưu nhảy đảo',
+    'phuket.water': 'Hoạt động dưới nước',
+    'phuket.waterDesc': 'Lặn, lặn với ống thở và thể thao dưới nước',
+    'phuket.sunset': 'Cảnh hoàng hôn',
+    'phuket.sunsetDesc': 'Hoàng hôn tuyệt đẹp và bữa tối lãng mạn',
+    'phuket.beachesAction': 'Bãi biển',
+    'phuket.diving': 'Lặn',
+    'phuket.islandTours': 'Tour đảo',
+    'phuket.sunsetAction': 'Hoàng hôn',
+
+    // Pattaya
+    'pattaya.title': 'Pattaya',
+    'pattaya.subtitle': 'Thành phố bãi biển',
+    'pattaya.subtitleThai': 'เมืองชายหาด',
+    'pattaya.beach': 'Hoạt động bãi biển',
+    'pattaya.beachDesc': 'Thể thao dưới nước, quầy bar bãi biển và thư giãn',
+    'pattaya.entertainment': 'Giải trí',
+    'pattaya.entertainmentDesc': 'Chương trình biểu diễn, cuộc sống về đêm và biểu diễn văn hóa',
+    'pattaya.shopping': 'Mua sắm',
+    'pattaya.shoppingDesc': 'Chợ, trung tâm thương mại và quà lưu niệm địa phương',
+    'pattaya.beachesAction': 'Bãi biển',
+    'pattaya.shows': 'Chương trình',
+    'pattaya.shoppingAction': 'Mua sắm',
+    'pattaya.food': 'Ẩm thực',
+
+    // Mae Sai
+    'maesai.title': 'Mae Sai',
+    'maesai.subtitle': 'Thị trấn biên giới phía Bắc',
+    'maesai.subtitleThai': 'เมืองชายแดนภาคเหนือ',
+    'maesai.market': 'Chợ biên giới',
+    'maesai.marketDesc': 'Mua sắm xuyên biên giới và thủ công mỹ nghệ địa phương',
+    'maesai.mountains': 'Cảnh núi',
+    'maesai.mountainsDesc': 'Cảnh quan núi non tuyệt đẹp và thiên nhiên',
+    'maesai.culture': 'Văn hóa địa phương',
+    'maesai.cultureDesc': 'Cộng đồng dân tộc thiểu số trên núi và truyền thống',
+    'maesai.marketsAction': 'Chợ',
+    'maesai.nature': 'Thiên nhiên',
+    'maesai.cultureAction': 'Văn hóa',
+    'maesai.food': 'Ẩm thực',
+    'maesai.borderInfo': 'Thông tin biên giới',
+    'maesai.borderDesc': 'Mae Sai là thị trấn biên giới cực bắc của Thái Lan, kết nối với Myanmar. Cửa khẩu biên giới mở cửa hàng ngày cho các chuyến đi trong ngày và mua sắm.',
   }
 }
 
@@ -1049,7 +1515,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // 从 localStorage 读取语言设置
     const savedLanguage = localStorage.getItem('language') as Language
-    if (savedLanguage && ['en', 'th', 'zh'].includes(savedLanguage)) {
+    if (savedLanguage && ['en', 'th', 'zh', 'vi'].includes(savedLanguage)) {
       setLanguage(savedLanguage)
     } else {
       // 检测浏览器语言
@@ -1058,6 +1524,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         setLanguage('th')
       } else if (browserLang === 'zh') {
         setLanguage('zh')
+      } else if (browserLang === 'vi') {
+        setLanguage('vi')
       } else {
         setLanguage('en')
       }

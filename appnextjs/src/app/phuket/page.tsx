@@ -82,6 +82,13 @@ export default function PhuketPage() {
             </div>
           </div>
 
+          {/* 附近城市 */}
+          <NearbyCities 
+            currentCityPath="phuket"
+            userLat={7.8804}
+            userLon={98.3923}
+          />
+
           {/* Navigation */}
           <div className="text-center">
             <button

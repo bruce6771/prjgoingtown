@@ -217,7 +217,7 @@ export default function Home() {
               🌍 {t('city.welcome')} GoingTown
           </h1>
             <p className="text-xl text-gray-600 dark:text-gray-400">
-              Discover your location and nearby cities
+              {t('common.detecting')}
             </p>
           </div>
 
@@ -226,14 +226,14 @@ export default function Home() {
             {/* 用户信息 */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                📍 位置信息
+                📍 {t('common.locationInfo')}
               </h3>
               
               {/* 权限状态 */}
               <div className="mb-4 p-3 rounded-lg border">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    地理位置权限:
+                    {t('common.locationPermission')}:
                   </span>
                   <span className={`text-xs px-2 py-1 rounded-full ${
                     locationPermission === 'granted' 
@@ -242,9 +242,9 @@ export default function Home() {
                       ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
                       : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
                   }`}>
-                    {locationPermission === 'granted' ? '已授权' : 
-                     locationPermission === 'denied' ? '已拒绝' : 
-                     locationPermission === 'prompt' ? '待授权' : '未知'}
+                    {locationPermission === 'granted' ? t('common.granted') : 
+                     locationPermission === 'denied' ? t('common.denied') : 
+                     locationPermission === 'prompt' ? t('common.prompt') : t('common.unknown')}
                   </span>
                 </div>
                 <button
@@ -255,20 +255,20 @@ export default function Home() {
                       : 'bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:hover:bg-blue-800'
                   }`}
                 >
-                  {locationPermission === 'granted' ? '🔒 管理位置权限' : '🔓 开启位置权限'}
+                  {locationPermission === 'granted' ? '🔒 ' + t('common.managePermission') : '🔓 ' + t('common.enablePermission')}
                 </button>
               </div>
               
               {loading && (
                 <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                  <span>正在获取位置信息...</span>
+                  <span>{t('common.gettingLocation')}</span>
                 </div>
               )}
 
               {error && (
                 <div className="text-red-600 dark:text-red-400 mb-4">
-                  <p className="font-semibold">位置获取失败</p>
+                  <p className="font-semibold">{t('common.locationFailed')}</p>
                   <p className="text-sm">{error}</p>
                 </div>
               )}
@@ -276,7 +276,7 @@ export default function Home() {
               {!loading && !error && (
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">IP 地址:</span>
+                    <span className="text-gray-600 dark:text-gray-400">{t('common.ipAddress')}:</span>
                     <span className="font-mono text-sm bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
                       {userIP}
                     </span>
@@ -287,17 +287,17 @@ export default function Home() {
                     <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                       <div className="flex items-center space-x-2 mb-2">
                         <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
-                          {locationSource === 'gps' ? '📍 GPS 定位' : '🌐 IP 定位'}
+                          {locationSource === 'gps' ? '📍 ' + t('common.gpsLocation') : '🌐 ' + t('common.ipLocation')}
                         </span>
                         {locationSource === 'ip' && (
                           <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-1 rounded-full">
-                            可能有误差
+                            {t('common.mayHaveError')}
                           </span>
                         )}
                       </div>
                       {locationSource === 'ip' && (
                         <p className="text-xs text-blue-700 dark:text-blue-300">
-                          IP 定位基于网络服务商位置，可能与实际位置有偏差
+                          {t('common.ipLocationNotice')}
                         </p>
                       )}
                     </div>
@@ -307,11 +307,11 @@ export default function Home() {
                   {latitude && longitude && locationSource === 'gps' && (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">GPS 纬度:</span>
+                        <span className="text-gray-600 dark:text-gray-400">GPS {t('common.latitude')}:</span>
                         <span className="font-mono text-sm">{latitude.toFixed(6)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">GPS 经度:</span>
+                        <span className="text-gray-600 dark:text-gray-400">GPS {t('common.longitude')}:</span>
                         <span className="font-mono text-sm">{longitude.toFixed(6)}</span>
                       </div>
                     </>
@@ -321,11 +321,11 @@ export default function Home() {
                   {ipLocation && locationSource === 'ip' && (
                     <>
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">IP 纬度:</span>
+                        <span className="text-gray-600 dark:text-gray-400">IP {t('common.latitude')}:</span>
                         <span className="font-mono text-sm">{ipLocation.latitude.toFixed(6)}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-gray-600 dark:text-gray-400">IP 经度:</span>
+                        <span className="text-gray-600 dark:text-gray-400">IP {t('common.longitude')}:</span>
                         <span className="font-mono text-sm">{ipLocation.longitude.toFixed(6)}</span>
                       </div>
                     </>
@@ -334,7 +334,7 @@ export default function Home() {
                   {/* 检测到的城市 */}
                   {(city || ipLocation?.city) && (
                     <div className="flex justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">检测到城市:</span>
+                      <span className="text-gray-600 dark:text-gray-400">{t('common.detectedCity')}:</span>
                       <span className="font-semibold text-blue-600 dark:text-blue-400">
                         {locationSource === 'gps' ? `${city}, ${country}` : `${ipLocation?.city}, ${ipLocation?.country}`}
                       </span>
@@ -347,7 +347,7 @@ export default function Home() {
             {/* 当前城市 */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                🏙️ 当前城市
+                🏙️ {t('common.currentCity')}
               </h3>
               
               {currentCity ? (
@@ -359,7 +359,7 @@ export default function Home() {
                       </h4>
                       {locationSource === 'ip' && (
                         <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-1 rounded-full">
-                          IP 定位
+                          {t('common.ipLocation')}
                         </span>
                       )}
                     </div>
@@ -367,10 +367,10 @@ export default function Home() {
                       {currentCity.country}
                     </p>
                     <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                      📍 距离约 {currentCity.distance}km
+                      📍 {t('common.distance')} {currentCity.distance}km
                       {locationSource === 'ip' && (
                         <span className="text-yellow-600 dark:text-yellow-400 ml-1">
-                          (基于 IP 定位，可能有误差)
+                          ({t('common.basedOnIP')}, {t('common.mayHaveDeviation')})
                         </span>
                       )}
                     </p>
@@ -379,12 +379,12 @@ export default function Home() {
                     onClick={() => handleCitySelect(currentCity.path)}
                     className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                   >
-                    访问 {getCityName(currentCity.path, t)}
+                    {t('common.visit')} {getCityName(currentCity.path, t)}
                   </button>
                 </div>
               ) : (
                 <div className="text-gray-500 dark:text-gray-400 text-center py-4">
-                  {loading ? '正在检测城市...' : '未检测到附近城市'}
+                  {loading ? t('common.detectingCity') : t('common.noNearbyCity')}
                 </div>
               )}
             </div>
@@ -395,11 +395,11 @@ export default function Home() {
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
-                  🌟 附近城市
+                  🌟 {t('common.nearbyCities')}
                 </h3>
                 {locationSource === 'ip' && (
                   <span className="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-1 rounded-full">
-                    基于 IP 定位
+                    {t('common.basedOnIP')}
                   </span>
                 )}
               </div>
@@ -424,10 +424,10 @@ export default function Home() {
                       {city.country}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                      📍 {city.distance}km away
+                      📍 {city.distance} {t('city.distance')}
                       {locationSource === 'ip' && (
                         <span className="text-yellow-600 dark:text-yellow-400 ml-1">
-                          (可能有误差)
+                          {t('common.mayHaveDeviation')}
                         </span>
                       )}
                     </p>
@@ -449,7 +449,7 @@ export default function Home() {
               onClick={() => window.location.reload()}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              重新检测位置
+              {t('common.redetectLocation')}
             </button>
           </div>
         </div>

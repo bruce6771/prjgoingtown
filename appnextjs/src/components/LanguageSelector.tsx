@@ -11,6 +11,7 @@ export function LanguageSelector() {
     { code: 'en' as const, name: t('lang.english'), flag: '🇺🇸' },
     { code: 'th' as const, name: t('lang.thai'), flag: '🇹🇭' },
     { code: 'zh' as const, name: t('lang.chinese'), flag: '🇨🇳' },
+    { code: 'vi' as const, name: t('lang.vietnamese'), flag: '🇻🇳' },
   ]
 
   const currentLanguage = languages.find(lang => lang.code === language)

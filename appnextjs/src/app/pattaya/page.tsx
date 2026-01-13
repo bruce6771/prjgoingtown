@@ -1,9 +1,13 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { NearbyCities } from '@/components/NearbyCities'
+import { LocalRadio } from '@/components/LocalRadio'
 
 export default function PattayaPage() {
   const router = useRouter()
+  const { t } = useLanguage()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
@@ -52,6 +56,12 @@ export default function PattayaPage() {
             </div>
           </div>
 
+          {/* Local Radio */}
+          <LocalRadio 
+            cityName="pattaya"
+            country="Thailand"
+          />
+
           {/* Quick Actions */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
@@ -73,19 +83,26 @@ export default function PattayaPage() {
             </div>
           </div>
 
+          {/* 附近城市 */}
+          <NearbyCities 
+            currentCityPath="pattaya"
+            userLat={12.9236}
+            userLon={100.8825}
+          />
+
           {/* Navigation */}
           <div className="text-center">
             <button
               onClick={() => router.push('/city-select')}
               className="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors mr-4"
             >
-              Change City
+              {t('nav.otherCities')}
             </button>
             <button
               onClick={() => router.push('/')}
               className="px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
             >
-              Home
+              {t('nav.home')}
             </button>
           </div>
         </div>

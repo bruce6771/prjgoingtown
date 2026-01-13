@@ -106,7 +106,7 @@ export function CityGroupedList({ userLat, userLon, showNearby = true }: CityGro
                 </span>
                 {country}
                 <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
-                  ({cities.length} {cities.length === 1 ? 'city' : 'cities'})
+                  ({cities.length} {cities.length === 1 ? t('common.city') : t('common.cities')})
                 </span>
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

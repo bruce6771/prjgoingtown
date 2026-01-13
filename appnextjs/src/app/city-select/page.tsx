@@ -75,7 +75,7 @@ function CitySelectContent() {
                       {city.country}
                     </p>
                     <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                      📍 {city.distance}km away
+                      📍 {city.distance} {t('city.distance')}
                     </p>
                   </button>
                 ))}

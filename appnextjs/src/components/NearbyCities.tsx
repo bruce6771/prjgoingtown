@@ -69,7 +69,7 @@ export function NearbyCities({ currentCityPath, userLat, userLon }: NearbyCities
             className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-blue-200 dark:border-blue-800 text-left"
           >
             <h4 className="font-semibold text-blue-900 dark:text-blue-100">
-              {city.name}
+              {getCityName(city.path, t)}
             </h4>
             <p className="text-sm text-blue-700 dark:text-blue-300">
               {city.country}
